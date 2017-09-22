@@ -16,28 +16,33 @@ import Neptune from '../planets/neptune';
 import Venus from '../planets/venus';
 import Saturn from '../planets/saturn';
 import Uranus from '../planets/uranus';
+import Planet from '../planets/planet';
 import { DAY_IN_MILLIS, SCALE, SOLAR_SCALE, PLANET_SCALE, RADIUS_SCALE } from '../variables';
 
-export const selector = ({ tick: time }: State) => ({ time });
+const PLANET_COLORS: { [key: string]: string } = {
+  mercury: '#7a1414',
+  venus: '#b4b04a',
+  earth: '#61d6eb',
+  mars: 'red',
+  jupiter: '#4435f0',
+  saturn: '#95a448',
+  neptune: '#2d6690',
+  uranus: '#1d7982',
+};
+
+export const selector = ({ tick: time, planets: { names: planets } }: State) => ({ time, planets });
 export const actions = { startTime, stopTime };
 
 @connect(selector, bindActions(actions))
 class SolarSystem extends Component<any, any> {
 
   sun: Sun;
-  earth: Earth;
-  mercury: Mercury;
-  venus: Venus;
-  mars: Mars;
-  jupiter: Jupiter;
-  uranus: Uranus;
-  neptune: Neptune;
-  saturn: Saturn;
+  planets: Planet[];
   startTime: number = new Date().getTime();
   model: SolarisModel = new SolarisModel();
   stage: Stage;
 
-  render({ time }: any) {
+  render({ time, startTime, stopTime }: SolarSystem.Props) {
     return (
       <section id="galaxy">
         <div id="solar-system"></div>
@@ -48,8 +53,8 @@ class SolarSystem extends Component<any, any> {
           <p>Planet Distance Scale: 1:{PLANET_SCALE}</p>
         </div>
         <div id="controls">
-          <button onClick={() => this.props.startTime()}>Start Time</button>
-          <button onClick={() => this.props.stopTime()}>Stop Time</button>
+          <button onClick={startTime}>Start Time</button>
+          <button onClick={stopTime}>Stop Time</button>
           <Timer time={time} />
         </div>
       </section>
@@ -63,28 +68,16 @@ class SolarSystem extends Component<any, any> {
       height: window.innerHeight
     });
     const [x, y] = [this.stage.getWidth() / 2, this.stage.getHeight() / 2];
+    console.log(this.props.planets);
     this.sun = new Sun(x, y, this.model.bodies.sun.radius);
-    this.earth = new Earth(this);
-    this.mercury = new Mercury(this);
-    this.jupiter = new Jupiter(this);
-    this.mars = new Mars(this);
-    this.neptune = new Neptune(this);
-    this.venus = new Venus(this);
-    this.uranus = new Uranus(this);
-    this.saturn = new Saturn(this);
+    this.planets = this.props.planets
+      .map((name: string) => new Planet(this, name, PLANET_COLORS[name]));
 
     const layer = new Layer();
     layer.add(this.sun);
 
     this.stage.add(layer);
-    this.stage.add(this.earth);
-    this.stage.add(this.mercury);
-    this.stage.add(this.jupiter);
-    this.stage.add(this.mars);
-    this.stage.add(this.neptune);
-    this.stage.add(this.venus);
-    this.stage.add(this.uranus);
-    this.stage.add(this.saturn);
+    this.planets.forEach(planet => this.stage.add(planet));
   }
 
   componentWillReceiveProps(props: any) {
@@ -92,20 +85,16 @@ class SolarSystem extends Component<any, any> {
     const date = new Date(newTime);
     const dateString = dateFormat(date, 'yyyy-mm-dd');
     this.model.setTime(dateString);
-    this.earth.updatePosition();
-    this.mercury.updatePosition();
-    this.venus.updatePosition();
-    this.mars.updatePosition();
-    this.jupiter.updatePosition();
-    this.saturn.updatePosition();
-    this.neptune.updatePosition();
-    this.uranus.updatePosition();
+    this.planets.forEach(planet => planet.updatePosition());
   }
 }
 
 namespace SolarSystem {
   export interface Props {
     time: number;
+    planets: string[];
+    startTime: () => void;
+    stopTime: () => void;
   }
 }
 

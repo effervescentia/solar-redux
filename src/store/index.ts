@@ -7,6 +7,15 @@ import sagas from './sagas';
 export interface State {
   running: boolean;
   tick: number;
+  planets: State.Planets;
+}
+
+export namespace State {
+  export interface Planets {
+    reversed: string[];
+    stopped: string[];
+    names: string[];
+  }
 }
 
 export default () => {

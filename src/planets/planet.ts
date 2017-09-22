@@ -3,20 +3,17 @@ import Sun from './sun';
 import { PLANET_SCALE, RADIUS_SCALE } from '../variables';
 import SolarSystem from '../tags/solar-system';
 
-abstract class Planet extends Layer {
+class Planet extends Layer {
   orb: Circle;
   title: Text;
   radius: number;
   paths: Circle[] = [];
 
   get body() {
-    return this.system.model.bodies[this.planet];
+    return this.system.model.bodies[this.planetName];
   }
 
-  abstract get color(): string;
-  abstract get planet(): string;
-
-  constructor(public system: SolarSystem) {
+  constructor(public system: SolarSystem, public planetName: string, public color: string) {
     super();
     const body = this.body;
     const { radius: rawRadius, position: [offsetX, offsetY] } = body;
@@ -26,7 +23,7 @@ abstract class Planet extends Layer {
     this.add(this.title = new Text({
       x: x - 50,
       y: y + radius + 5,
-      text: this.planet,
+      text: this.planetName,
       width: 100,
       align: 'center',
       fill: 'white'

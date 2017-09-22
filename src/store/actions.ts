@@ -13,8 +13,20 @@ namespace Actions {
   export type StartTime = Action<typeof START_TIME>;
   export const STOP_TIME = 'STOP_TIME';
   export type StopTime = Action<typeof STOP_TIME>;
+
   export const TICK = 'TICK';
   export type Tick = Action<typeof TICK, number>;
+
+  export const ADD_PLANET = 'ADD_PLANET';
+  export type AddPlanet = Action<typeof ADD_PLANET, string>;
+  export const REMOVE_PLANET = 'REMOVE_PLANET';
+  export type RemovePlanet = Action<typeof REMOVE_PLANET, string>;
+  export const STOP_PLANET = 'STOP_PLANET';
+  export type StopPlanet = Action<typeof STOP_PLANET, string>;
+  export const START_PLANET = 'START_PLANET';
+  export type StartPlanet = Action<typeof START_PLANET, string>;
+  export const REVERSE_PLANET = 'REVERSE_PLANET';
+  export type ReversePlanet = Action<typeof REVERSE_PLANET, string>;
 
   // tslint:disable-next-line max-line-length
   export const createAction = (type: string, payloadCreator: (...args: any[]) => any = <any>null, validator: any = {}) =>
