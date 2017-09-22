@@ -8,16 +8,10 @@ import { startTime, stopTime } from '../store/actions';
 import Timer from './timer';
 import { bindActions } from './utils';
 import Sun from '../planets/sun';
-import Earth from '../planets/earth';
-import Mars from '../planets/mars';
-import Mercury from '../planets/mercury';
-import Jupiter from '../planets/jupiter';
-import Neptune from '../planets/neptune';
-import Venus from '../planets/venus';
-import Saturn from '../planets/saturn';
-import Uranus from '../planets/uranus';
 import Planet from '../planets/planet';
+import { PLANETS } from '../store/reducers/planets';
 import { DAY_IN_MILLIS, SCALE, SOLAR_SCALE, PLANET_SCALE, RADIUS_SCALE } from '../variables';
+import PlanetControls from './planet-controls';
 
 const PLANET_COLORS: { [key: string]: string } = {
   mercury: '#7a1414',
@@ -52,6 +46,9 @@ class SolarSystem extends Component<any, any> {
           <p>Planet Size Scale: 1:{Math.round(RADIUS_SCALE)}</p>
           <p>Planet Distance Scale: 1:{PLANET_SCALE}</p>
         </div>
+        <div id="planet-controls">
+          {PLANETS.map(name => <PlanetControls name={name}/>)}
+        </div>
         <div id="controls">
           <button onClick={startTime}>Start Time</button>
           <button onClick={stopTime}>Stop Time</button>
@@ -68,7 +65,6 @@ class SolarSystem extends Component<any, any> {
       height: window.innerHeight
     });
     const [x, y] = [this.stage.getWidth() / 2, this.stage.getHeight() / 2];
-    console.log(this.props.planets);
     this.sun = new Sun(x, y, this.model.bodies.sun.radius);
     this.planets = this.props.planets
       .map((name: string) => new Planet(this, name, PLANET_COLORS[name]));

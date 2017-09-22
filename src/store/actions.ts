@@ -1,6 +1,6 @@
 import { Action as ReduxAction } from 'redux';
 import { createAction as createFSA } from 'redux-actions';
-import { timeIsStopped, timeHasStarted } from './validators';
+import * as validators from './validators';
 import { State } from '.';
 
 export interface Action<T extends string, P = undefined> extends ReduxAction {
@@ -36,9 +36,22 @@ namespace Actions {
 export default Actions;
 
 export const startTime = Actions.createAction(Actions.START_TIME, <any>null, {
-  payload: timeIsStopped
+  payload: validators.timeIsStopped
 });
 export const stopTime = Actions.createAction(Actions.STOP_TIME, <any>null, {
-  payload: timeHasStarted
+  payload: validators.timeHasStarted
 });
+export const addPlanet = Actions.createAction(Actions.ADD_PLANET, <any>null, {
+  payload: validators.planetNonexistent
+});
+export const removePlanet = Actions.createAction(Actions.REMOVE_PLANET, <any>null, {
+  payload: validators.planetExists
+});
+export const stopPlanet = Actions.createAction(Actions.STOP_PLANET, <any>null, {
+  payload: validators.planetIsMoving
+});
+export const startPlanet = Actions.createAction(Actions.START_PLANET, <any>null, {
+  payload: validators.planetIsStopped
+});
+export const reversePlanet = Actions.createAction(Actions.REVERSE_PLANET);
 export const tick = Actions.createAction(Actions.TICK, (inc: number = 1) => inc);

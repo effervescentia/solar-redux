@@ -24,6 +24,8 @@ export default () => {
 
   const store = createStore(reducers, {}, applyMiddleware(validatorMiddleware, sagaMiddleware));
 
+  store.subscribe(() => console.log(store.getState()));
+
   sagas.forEach(saga => sagaMiddleware.run(saga));
 
   return store;

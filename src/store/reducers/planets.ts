@@ -36,6 +36,8 @@ export default (state: State.Planets = { stopped: [], reversed: [], names: PLANE
     case Actions.REVERSE_PLANET: return {
       ...state,
       reversed: state.reversed.includes(action.payload)
+        ? state.reversed.filter(name => name !== action.payload) 
+        : [...state.reversed]
     }
     default: return state;
   }
