@@ -1,0 +1,22 @@
+body {
+  display: flex;
+  height: 100vh;
+  margin: 0;
+}
+
+#galaxy {
+  position: relative;
+}
+
+#controls {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  background-color: white;
+}
+
+#solar-system {
+  width: 100vw;
+  height: 100vh;
+  background-color: black;
+}
