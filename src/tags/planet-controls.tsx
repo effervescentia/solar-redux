@@ -17,12 +17,12 @@ class PlanetControl extends Component<{ name: string }, any> {
   render(props: PlanetControl.Props) {
     return (
       <div>
-        <h4>{name}</h4>
-        <button onClick={() => props.addPlanet(name)}>Add</button>
-        <button onClick={() => props.removePlanet(name)}>Remove</button>
-        <button onClick={() => props.startPlanet(name)}>Start</button>
-        <button onClick={() => props.stopPlanet(name)}>Stop</button>
-        <button onClick={() => props.reversePlanet(name)}>Reverse</button>
+        <h4>{props.name}</h4>
+        <button onClick={() => props.addPlanet(props.name)}>Add</button>
+        <button onClick={() => props.removePlanet(props.name)}>Remove</button>
+        <button onClick={() => props.startPlanet(props.name)}>Start</button>
+        <button onClick={() => props.stopPlanet(props.name)}>Stop</button>
+        <button onClick={() => props.reversePlanet(props.name)}>Reverse</button>
       </div>
     );
   }
