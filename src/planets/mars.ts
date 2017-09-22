@@ -1,5 +1,5 @@
 import Sun from './sun';
-import Planet, { Body } from './planet';
+import Planet from './planet';
 
 class Mars extends Planet {
   get planet() {return 'mars';}

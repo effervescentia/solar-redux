@@ -8,6 +8,13 @@ body {
   position: relative;
 }
 
+#scale {
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: white;
+}
+
 #controls {
   position: absolute;
   left: 0;

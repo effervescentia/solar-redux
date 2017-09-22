@@ -16,7 +16,7 @@ import Neptune from '../planets/neptune';
 import Venus from '../planets/venus';
 import Saturn from '../planets/saturn';
 import Uranus from '../planets/uranus';
-import { DAY_IN_MILLIS } from '../variables';
+import { DAY_IN_MILLIS, SCALE, SOLAR_SCALE, PLANET_SCALE, RADIUS_SCALE } from '../variables';
 
 export const selector = ({ tick: time }: State) => ({ time });
 export const actions = { startTime, stopTime };
@@ -34,13 +34,19 @@ class SolarSystem extends Component<any, any> {
   neptune: Neptune;
   saturn: Saturn;
   startTime: number = new Date().getTime();
-  system: SolarisModel = new SolarisModel();
+  model: SolarisModel = new SolarisModel();
   stage: Stage;
 
   render({ time }: any) {
     return (
       <section id="galaxy">
         <div id="solar-system"></div>
+        <div id="scale">
+          <p>Base Scale: 1:{SCALE}</p>
+          <p>Sun Size Scale: 1:{SOLAR_SCALE}</p>
+          <p>Planet Size Scale: 1:{Math.round(RADIUS_SCALE)}</p>
+          <p>Planet Distance Scale: 1:{PLANET_SCALE}</p>
+        </div>
         <div id="controls">
           <button onClick={() => this.props.startTime()}>Start Time</button>
           <button onClick={() => this.props.stopTime()}>Stop Time</button>
@@ -57,15 +63,15 @@ class SolarSystem extends Component<any, any> {
       height: window.innerHeight
     });
     const [x, y] = [this.stage.getWidth() / 2, this.stage.getHeight() / 2];
-    this.sun = new Sun(x, y, this.system.bodies.sun.radius);
-    this.earth = new Earth(this.sun, this.system.bodies.earth);
-    this.mercury = new Mercury(this.sun, this.system.bodies.mercury);
-    this.jupiter = new Jupiter(this.sun, this.system.bodies.jupiter);
-    this.mars = new Mars(this.sun, this.system.bodies.mars);
-    this.neptune = new Neptune(this.sun, this.system.bodies.neptune);
-    this.venus = new Venus(this.sun, this.system.bodies.venus);
-    this.uranus = new Uranus(this.sun, this.system.bodies.uranus);
-    this.saturn = new Saturn(this.sun, this.system.bodies.saturn);
+    this.sun = new Sun(x, y, this.model.bodies.sun.radius);
+    this.earth = new Earth(this);
+    this.mercury = new Mercury(this);
+    this.jupiter = new Jupiter(this);
+    this.mars = new Mars(this);
+    this.neptune = new Neptune(this);
+    this.venus = new Venus(this);
+    this.uranus = new Uranus(this);
+    this.saturn = new Saturn(this);
 
     const layer = new Layer();
     layer.add(this.sun);
@@ -85,17 +91,15 @@ class SolarSystem extends Component<any, any> {
     const newTime = this.startTime + props.time * DAY_IN_MILLIS * 7;
     const date = new Date(newTime);
     const dateString = dateFormat(date, 'yyyy-mm-dd');
-    this.system.setTime(dateString);
-    const rad = this.sun.radius();
-    this.sun.radius(rad * props.time);
-    this.earth.setPosition(this.system.bodies.earth);
-    this.mercury.setPosition(this.system.bodies.mercury);
-    this.venus.setPosition(this.system.bodies.venus);
-    this.mars.setPosition(this.system.bodies.mars);
-    this.jupiter.setPosition(this.system.bodies.jupiter);
-    this.saturn.setPosition(this.system.bodies.saturn);
-    this.neptune.setPosition(this.system.bodies.neptune);
-    this.uranus.setPosition(this.system.bodies.uranus);
+    this.model.setTime(dateString);
+    this.earth.updatePosition();
+    this.mercury.updatePosition();
+    this.venus.updatePosition();
+    this.mars.updatePosition();
+    this.jupiter.updatePosition();
+    this.saturn.updatePosition();
+    this.neptune.updatePosition();
+    this.uranus.updatePosition();
   }
 }
 
