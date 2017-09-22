@@ -28,6 +28,9 @@ namespace Actions {
   export const REVERSE_PLANET = 'REVERSE_PLANET';
   export type ReversePlanet = Action<typeof REVERSE_PLANET, string>;
 
+  export const SET_RELATIVITY = 'SET_RELATIVITY';
+  export type SetRelativity = Action<typeof SET_RELATIVITY, number>;
+
   // tslint:disable-next-line max-line-length
   export const createAction = (type: string, payloadCreator: (...args: any[]) => any = <any>null, validator: any = {}) =>
     createFSA(type, payloadCreator, () => ({ validator }))
@@ -55,3 +58,5 @@ export const startPlanet = Actions.createAction(Actions.START_PLANET, <any>null,
 });
 export const reversePlanet = Actions.createAction(Actions.REVERSE_PLANET);
 export const tick = Actions.createAction(Actions.TICK, (inc: number = 1) => inc);
+// tslint:disable-next-line max-line-length
+export const setRelativity = Actions.createAction(Actions.SET_RELATIVITY, (relativity: number) => relativity);

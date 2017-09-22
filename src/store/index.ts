@@ -7,6 +7,7 @@ import sagas from './sagas';
 export interface State {
   running: boolean;
   tick: number;
+  relativity: number;
   planets: State.Planets;
 }
 

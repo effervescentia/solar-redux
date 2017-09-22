@@ -1,11 +1,13 @@
+// tslint:disable max-line-length
 import { h, Component } from 'preact';
 import { connect } from 'preact-redux';
-import { Stage, Layer, Circle } from 'konva';
+import { Stage, Layer } from 'konva';
 import SolarisModel from 'solaris-model';
 import * as dateFormat from 'dateformat';
 import { State } from '../store';
-import { startTime, stopTime } from '../store/actions';
+import { startTime, stopTime, setRelativity } from '../store/actions';
 import Timer from './timer';
+import Scale from './scale';
 import { bindActions } from './utils';
 import Sun from '../planets/sun';
 import Planet from '../planets/planet';
@@ -24,8 +26,13 @@ const PLANET_COLORS: { [key: string]: string } = {
   uranus: '#1d7982',
 };
 
-export const selector = ({ tick: time, planets: { names: planets } }: State) => ({ time, planets });
-export const actions = { startTime, stopTime };
+export const selector = ({ tick: time, planets: { names: planets }, relativity }: State) =>
+  ({ time, planets, relativity });
+export const actions = {
+  startTime,
+  stopTime,
+  setRelativity: (e: any) => setRelativity(parseInt(e.target.value as string, undefined))
+};
 
 @connect(selector, bindActions(actions))
 class SolarSystem extends Component<any, any> {
@@ -36,23 +43,18 @@ class SolarSystem extends Component<any, any> {
   model: SolarisModel = new SolarisModel();
   stage: Stage;
 
-  render({ time, startTime, stopTime }: SolarSystem.Props) {
+  render(props: SolarSystem.Props) {
     return (
       <section id="galaxy">
         <div id="solar-system"></div>
-        <div id="scale">
-          <p>Base Scale: 1:{SCALE}</p>
-          <p>Sun Size Scale: 1:{SOLAR_SCALE}</p>
-          <p>Planet Size Scale: 1:{Math.round(RADIUS_SCALE)}</p>
-          <p>Planet Distance Scale: 1:{PLANET_SCALE}</p>
-        </div>
+        <Scale />
         <div id="planet-controls">
-          {PLANETS.map(name => <PlanetControls name={name}/>)}
+          {PLANETS.map(name => <PlanetControls name={name} />)}
         </div>
         <div id="controls">
-          <button onClick={startTime}>Start Time</button>
-          <button onClick={stopTime}>Stop Time</button>
-          <Timer time={time} />
+          <button onClick={props.startTime}>Start Time</button>
+          <button onClick={props.stopTime}>Stop Time</button>
+          <Timer time={props.time} />
         </div>
       </section>
     );
@@ -77,7 +79,7 @@ class SolarSystem extends Component<any, any> {
   }
 
   componentWillReceiveProps(props: any) {
-    const newTime = this.startTime + props.time * DAY_IN_MILLIS * 7;
+    const newTime = this.startTime + props.time * DAY_IN_MILLIS * this.props.relativity;
     const date = new Date(newTime);
     const dateString = dateFormat(date, 'yyyy-mm-dd');
     this.model.setTime(dateString);
@@ -88,9 +90,11 @@ class SolarSystem extends Component<any, any> {
 namespace SolarSystem {
   export interface Props {
     time: number;
+    relativity: number;
     planets: string[];
     startTime: () => void;
     stopTime: () => void;
+    setRelativity: (e: any) => void;
   }
 }
 

@@ -10,7 +10,9 @@ const store = createStore();
 // tslint:disable-next-line variable-name
 const App = () => (
   <Provider store={store}>
-    <SolarSystem />
+    <div>
+      <SolarSystem />
+    </div>
   </Provider>
 );
 
