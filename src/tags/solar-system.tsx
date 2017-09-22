@@ -5,7 +5,7 @@ import { Stage, Layer } from 'konva';
 import SolarisModel from 'solaris-model';
 import * as dateFormat from 'dateformat';
 import { State } from '../store';
-import { startTime, stopTime, setRelativity } from '../store/actions';
+import { startTime, stopTime } from '../store/actions';
 import Timer from './timer';
 import Scale from './scale';
 import { bindActions } from './utils';
@@ -30,8 +30,7 @@ export const selector = ({ tick: time, planets: { names: planets }, relativity }
   ({ time, planets, relativity });
 export const actions = {
   startTime,
-  stopTime,
-  setRelativity: (e: any) => setRelativity(parseInt(e.target.value as string, undefined))
+  stopTime
 };
 
 @connect(selector, bindActions(actions))
@@ -90,11 +89,9 @@ class SolarSystem extends Component<any, any> {
 namespace SolarSystem {
   export interface Props {
     time: number;
-    relativity: number;
     planets: string[];
     startTime: () => void;
     stopTime: () => void;
-    setRelativity: (e: any) => void;
   }
 }
 
