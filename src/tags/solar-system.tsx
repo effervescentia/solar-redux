@@ -43,7 +43,6 @@ class SolarSystem extends Component<any, any> {
   startTime: number = new Date().getTime();
   model: SolarisModel = new SolarisModel();
   stage: Stage;
-  layer: Layer;
 
   render(props: SolarSystem.Props) {
     return (
@@ -73,10 +72,7 @@ class SolarSystem extends Component<any, any> {
     this.planets = this.props.planets
       .map((name: string) => new Planet(this, name, PLANET_COLORS[name]));
 
-    this.layer = new Layer();
-    this.layer.add(this.sun);
-
-    this.stage.add(this.layer);
+    this.stage.add(this.sun);
     this.planets.forEach(planet => this.stage.add(planet));
   }
 
@@ -85,9 +81,7 @@ class SolarSystem extends Component<any, any> {
     const date = new Date(newTime);
     const dateString = dateFormat(date, 'yyyy-mm-dd');
     this.model.setTime(dateString);
-    this.layer.clear();
     this.sun.updateRadius();
-    this.layer.draw();
     this.planets.forEach(planet => planet.updatePosition());
   }
 }

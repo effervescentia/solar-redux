@@ -18,7 +18,7 @@ class Planet extends Layer {
     const { distanceScale, radiusScale } = this.system.props;
     const { radius: rawRadius, position: [offsetX, offsetY] } = body;
     const radius = this.radius = rawRadius / radiusScale;
-    const [sunX, sunY] = [this.system.sun.x(), this.system.sun.y()];
+    const [sunX, sunY] = [this.system.sun.orb.x(), this.system.sun.orb.y()];
     const [x, y] = [sunX + offsetX / distanceScale, sunY + offsetY / distanceScale];
     this.add(this.title = new Text({
       x: x - 50,
