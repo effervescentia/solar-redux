@@ -7,14 +7,14 @@ export type Action = Actions.AddPlanet |
   Actions.StartPlanet |
   Actions.ReversePlanet;
 export const PLANETS = [
-  'mercury',
-  'venus',
-  'earth',
-  'mars',
-  'jupiter',
-  'saturn',
-  'neptune',
   'uranus',
+  'neptune',
+  'saturn',
+  'jupiter',
+  'earth',
+  'venus',
+  'mars',
+  'mercury',
 ];
 
 // tslint:disable-next-line max-line-length

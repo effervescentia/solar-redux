@@ -1,6 +1,5 @@
 import { Layer, Circle, Text } from 'konva';
 import Sun from './sun';
-import { RADIUS_SCALE } from '../variables';
 import SolarSystem from '../tags/solar-system';
 
 class Planet extends Layer {
@@ -16,9 +15,9 @@ class Planet extends Layer {
   constructor(public system: SolarSystem, public planetName: string, public color: string) {
     super();
     const body = this.body;
-    const { distanceScale } = this.system.props;
+    const { distanceScale, radiusScale } = this.system.props;
     const { radius: rawRadius, position: [offsetX, offsetY] } = body;
-    const radius = this.radius = rawRadius / RADIUS_SCALE;
+    const radius = this.radius = rawRadius / radiusScale;
     const [sunX, sunY] = [this.system.sun.x(), this.system.sun.y()];
     const [x, y] = [sunX + offsetX / distanceScale, sunY + offsetY / distanceScale];
     this.add(this.title = new Text({
@@ -64,7 +63,9 @@ class Planet extends Layer {
   }
 
   drawPath(sunX: number, sunY: number, path: [number, number][]) {
-    const { distanceScale } = this.system.props;
+    const { distanceScale, radiusScale } = this.system.props;
+    const { radius: rawRadius } = this.body;
+    this.orb.radius(this.radius = rawRadius / radiusScale);
     path.reverse()
       .filter((_, index) => index < 200)
       .forEach(([pathX, pathY], index) => {

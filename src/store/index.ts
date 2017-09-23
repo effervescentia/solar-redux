@@ -7,8 +7,7 @@ import sagas from './sagas';
 export interface State {
   running: boolean;
   tick: number;
-  relativity: number;
-  distanceScale: number;
+  scale: State.Scale;
   planets: State.Planets;
 }
 
@@ -17,6 +16,12 @@ export namespace State {
     reversed: string[];
     stopped: string[];
     names: string[];
+  }
+  export interface Scale {
+    relativity: number;
+    distance: number;
+    radius: number;
+    solar: number;
   }
 }
 

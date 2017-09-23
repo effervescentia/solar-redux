@@ -30,8 +30,12 @@ namespace Actions {
 
   export const SET_RELATIVITY = 'SET_RELATIVITY';
   export type SetRelativity = Action<typeof SET_RELATIVITY, number>;
-  export const SET_DISTANCE_SCALE = 'SET_PLANET_SCALE';
+  export const SET_DISTANCE_SCALE = 'SET_DISTANCE_SCALE';
   export type SetDistanceScale = Action<typeof SET_DISTANCE_SCALE, number>;
+  export const SET_RADIUS_SCALE = 'SET_RADIUS_SCALE';
+  export type SetRadiusScale = Action<typeof SET_RADIUS_SCALE, number>;
+  export const SET_SOLAR_SCALE = 'SET_SOLAR_SCALE';
+  export type SetSolarScale = Action<typeof SET_SOLAR_SCALE, number>;
 
   // tslint:disable-next-line max-line-length
   export const createAction = (type: string, payloadCreator: (...args: any[]) => any = <any>null, validator: any = {}) =>
@@ -65,3 +69,5 @@ export const tick = Actions.createAction(Actions.TICK, (inc: number = 1) => inc)
 
 export const setRelativity = Actions.createAction(Actions.SET_RELATIVITY);
 export const setDistanceScale = Actions.createAction(Actions.SET_DISTANCE_SCALE);
+export const setRadiusScale = Actions.createAction(Actions.SET_RADIUS_SCALE);
+export const setSolarScale = Actions.createAction(Actions.SET_SOLAR_SCALE);

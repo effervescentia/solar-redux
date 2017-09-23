@@ -26,8 +26,13 @@ const PLANET_COLORS: { [key: string]: string } = {
   uranus: '#1d7982',
 };
 
-export const selector = ({ tick: time, planets: { names: planets }, relativity, distanceScale }: State) =>
-  ({ time, planets, relativity, distanceScale: distanceScale * PLANET_SCALE });
+export const selector = ({ tick: time, planets: { names: planets }, scale: { relativity, distance, radius, solar } }: State) =>
+  ({
+    time, planets, relativity,
+    distanceScale: distance * PLANET_SCALE,
+    radiusScale: radius * RADIUS_SCALE,
+    solarScale: solar * SOLAR_SCALE,
+  });
 export const actions = { startTime, stopTime };
 
 @connect(selector, bindActions(actions))
@@ -38,6 +43,7 @@ class SolarSystem extends Component<any, any> {
   startTime: number = new Date().getTime();
   model: SolarisModel = new SolarisModel();
   stage: Stage;
+  layer: Layer;
 
   render(props: SolarSystem.Props) {
     return (
@@ -60,17 +66,17 @@ class SolarSystem extends Component<any, any> {
     this.stage = new Stage({
       container: 'solar-system',
       width: window.innerWidth,
-      height: window.innerHeight
+      height: window.innerHeight,
     });
     const [x, y] = [this.stage.getWidth() / 2, this.stage.getHeight() / 2];
-    this.sun = new Sun(x, y, this.model.bodies.sun.radius);
+    this.sun = new Sun(x, y, this.model.bodies.sun.radius / this.props.solarScale);
     this.planets = this.props.planets
       .map((name: string) => new Planet(this, name, PLANET_COLORS[name]));
 
-    const layer = new Layer();
-    layer.add(this.sun);
+    this.layer = new Layer();
+    this.layer.add(this.sun);
 
-    this.stage.add(layer);
+    this.stage.add(this.layer);
     this.planets.forEach(planet => this.stage.add(planet));
   }
 
@@ -79,6 +85,9 @@ class SolarSystem extends Component<any, any> {
     const date = new Date(newTime);
     const dateString = dateFormat(date, 'yyyy-mm-dd');
     this.model.setTime(dateString);
+    this.layer.clear();
+    this.sun.radius(this.model.bodies.sun.radius / this.props.solarScale);
+    this.layer.draw();
     this.planets.forEach(planet => planet.updatePosition());
   }
 }
@@ -86,7 +95,10 @@ class SolarSystem extends Component<any, any> {
 namespace SolarSystem {
   export interface Props {
     time: number;
+    relativity: number;
     distanceScale: number;
+    radiusScale: number;
+    solarScale: number;
     planets: string[];
     startTime: () => void;
     stopTime: () => void;
