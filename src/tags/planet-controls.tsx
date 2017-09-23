@@ -13,8 +13,8 @@ const actions = {
 };
 
 @connect(undefined, bindActions(actions))
-class PlanetControl extends Component<{ name: string }, any> {
-  render(props: PlanetControl.Props) {
+class PlanetControls extends Component<{ name: string }, any> {
+  render(props: PlanetControls.Props) {
     return (
       <div>
         <h4>{props.name}</h4>
@@ -28,7 +28,7 @@ class PlanetControl extends Component<{ name: string }, any> {
   }
 }
 
-namespace PlanetControl {
+namespace PlanetControls {
   export interface Props {
     name: string;
     addPlanet: (name: string) => void;
@@ -39,4 +39,4 @@ namespace PlanetControl {
   }
 }
 
-export default PlanetControl;
+export default PlanetControls;

@@ -14,12 +14,17 @@ class Sun extends Layer {
       y: system.stage.getHeight() / 2, fill: 'yellow'
     });
     this.add(this.orb);
+    this.system.stage.add(this);
   }
 
   updateRadius() {
     this.clear();
     this.orb.radius(this.system.model.bodies.sun.radius / this.system.props.solarScale);
     this.draw();
+  }
+
+  getCenter() {
+    return [this.orb.x(), this.orb.y()];
   }
 }
 

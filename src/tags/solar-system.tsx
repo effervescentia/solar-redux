@@ -1,19 +1,17 @@
 // tslint:disable max-line-length
 import { h, Component } from 'preact';
 import { connect } from 'preact-redux';
-import { Stage, Layer } from 'konva';
+import { Stage } from 'konva';
 import SolarisModel from 'solaris-model';
 import * as dateFormat from 'dateformat';
-import { State } from '../store';
-import { startTime, stopTime } from '../store/actions';
-import Timer from './timer';
 import Scale from './scale';
-import { bindActions } from './utils';
+import TimeControls from './time-controls';
+import PlanetControls from './planet-controls';
+import { State } from '../store';
 import Sun from '../bodies/sun';
 import Planet from '../bodies/planet';
 import { PLANETS } from '../store/reducers/planets';
-import { DAY_IN_MILLIS, SCALE, SOLAR_SCALE, PLANET_SCALE, RADIUS_SCALE } from '../variables';
-import PlanetControls from './planet-controls';
+import { DAY_IN_MILLIS, SOLAR_SCALE, PLANET_SCALE, RADIUS_SCALE } from '../variables';
 
 const PLANET_COLORS: { [key: string]: string } = {
   mercury: '#7a1414',
@@ -33,13 +31,12 @@ export const selector = ({ tick: time, planets: { names: planets }, scale: { rel
     radiusScale: radius * RADIUS_SCALE,
     solarScale: solar * SOLAR_SCALE,
   });
-export const actions = { startTime, stopTime };
 
-@connect(selector, bindActions(actions))
+@connect(selector)
 class SolarSystem extends Component<any, any> {
 
   sun: Sun;
-  planets: Planet[];
+  planets: { [key: string]: Planet };
   startTime: number = new Date().getTime();
   model: SolarisModel = new SolarisModel();
   stage: Stage;
@@ -52,11 +49,7 @@ class SolarSystem extends Component<any, any> {
         <div id="planet-controls">
           {PLANETS.map(name => <PlanetControls name={name} />)}
         </div>
-        <div id="controls">
-          <button onClick={props.startTime}>Start Time</button>
-          <button onClick={props.stopTime}>Stop Time</button>
-          <Timer time={props.time} />
-        </div>
+        <TimeControls />
       </section>
     );
   }
@@ -67,13 +60,9 @@ class SolarSystem extends Component<any, any> {
       width: window.innerWidth,
       height: window.innerHeight,
     });
-    const [x, y] = [this.stage.getWidth() / 2, this.stage.getHeight() / 2];
     this.sun = new Sun(this);
     this.planets = this.props.planets
-      .map((name: string) => new Planet(this, name, PLANET_COLORS[name]));
-
-    this.stage.add(this.sun);
-    this.planets.forEach(planet => this.stage.add(planet));
+      .reduce((planets: { [key: string]: Planet }, name: string) => Object.assign(planets, { [name]: new Planet(this, name, PLANET_COLORS[name]) }), {});
   }
 
   componentWillReceiveProps(props: any) {
@@ -82,7 +71,7 @@ class SolarSystem extends Component<any, any> {
     const dateString = dateFormat(date, 'yyyy-mm-dd');
     this.model.setTime(dateString);
     this.sun.updateRadius();
-    this.planets.forEach(planet => planet.updatePosition());
+    Object.keys(this.planets).forEach(key => this.planets[key].updatePosition());
   }
 }
 
@@ -94,8 +83,6 @@ namespace SolarSystem {
     radiusScale: number;
     solarScale: number;
     planets: string[];
-    startTime: () => void;
-    stopTime: () => void;
   }
 }
 

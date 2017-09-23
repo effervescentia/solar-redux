@@ -18,7 +18,7 @@ class Planet extends Layer {
     const { distanceScale, radiusScale } = this.system.props;
     const { radius: rawRadius, position: [offsetX, offsetY] } = body;
     const radius = this.radius = rawRadius / radiusScale;
-    const [sunX, sunY] = [this.system.sun.orb.x(), this.system.sun.orb.y()];
+    const [sunX, sunY] = this.system.sun.getCenter();
     const [x, y] = [sunX + offsetX / distanceScale, sunY + offsetY / distanceScale];
     this.add(this.title = new Text({
       x: x - 50,
@@ -45,13 +45,14 @@ class Planet extends Layer {
         });
         this.paths.push(path);
         this.add(path);
+        this.system.stage.add(this);
       });
   }
 
   updatePosition() {
     const { distanceScale } = this.system.props;
     const { position: [offsetX, offsetY] } = this.body;
-    const [sunX, sunY] = [this.system.sun.x(), this.system.sun.y()];
+    const [sunX, sunY] = this.system.sun.getCenter();
     const [x, y] = [sunX + offsetX / distanceScale, sunY + offsetY / distanceScale];
     this.clear();
     this.orb.x(x);
