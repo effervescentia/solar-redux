@@ -2,14 +2,15 @@ import { h, Component } from 'preact';
 import { connect } from 'preact-redux';
 import { bindActions } from './utils';
 // tslint:disable-next-line max-line-length
-import Actions, { addPlanet, removePlanet, startPlanet, stopPlanet, reversePlanet } from '../store/actions';
+import Actions, { addPlanet, removePlanet, startPlanet, stopPlanet, reversePlanet, followPlanet } from '../store/actions';
 
 const actions = {
   addPlanet,
   removePlanet,
   startPlanet,
   stopPlanet,
-  reversePlanet
+  reversePlanet,
+  followPlanet,
 };
 
 @connect(undefined, bindActions(actions))
@@ -23,6 +24,7 @@ class PlanetControls extends Component<{ name: string }, any> {
         <button onClick={() => props.startPlanet(props.name)}>Start</button>
         <button onClick={() => props.stopPlanet(props.name)}>Stop</button>
         <button onClick={() => props.reversePlanet(props.name)}>Reverse</button>
+        <button onClick={() => props.followPlanet(props.name)}>Follow</button>
       </div>
     );
   }
@@ -36,6 +38,7 @@ namespace PlanetControls {
     startPlanet: (name: string) => void;
     stopPlanet: (name: string) => void;
     reversePlanet: (name: string) => void;
+    followPlanet: (name: string) => void;
   }
 }
 

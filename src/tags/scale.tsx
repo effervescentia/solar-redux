@@ -2,13 +2,14 @@
 import { h, Component } from 'preact';
 import { connect } from 'preact-redux';
 import { State } from '../store';
-import { setRelativity, setDistanceScale, setRadiusScale, setSolarScale, setTailLength } from '../store/actions';
+import { setRelativity, setDistanceScale, setRadiusScale, setSolarScale, setTailLength, flipView } from '../store/actions';
 import { bindActions } from './utils';
 import { DAY_IN_MILLIS, SCALE, SOLAR_SCALE, PLANET_SCALE, RADIUS_SCALE } from '../variables';
 
-export const selector = ({ scale: { relativity, distance, radius, solar, tail } }: State) =>
-  ({ relativity, distance, radius, solar, tail });
+export const selector = ({ sideView, scale: { relativity, distance, radius, solar, tail } }: State) =>
+  ({ relativity, distance, radius, solar, tail, isSideView: sideView });
 export const actions = {
+  flipView,
   setRelativity: (e: any) => setRelativity(parseInt(e.target.value as string, undefined)),
   setDistanceScale: (e: any) => setDistanceScale(parseInt(e.target.value as string, undefined)),
   setRadiusScale: (e: any) => setRadiusScale(parseInt(e.target.value as string, undefined)),
@@ -33,6 +34,9 @@ class Scale extends Component<any, any> {
         <input type="range" min="1" max="500" onChange={props.setRelativity} value={props.relativity.toString()}></input>
         <p>Tail Length: {props.tail}°</p>
         <input type="range" min="1" max="360" onChange={props.setTailLength} value={props.tail.toString()}></input>
+        <div>
+          <button onClick={props.flipView}>Flip View</button>
+        </div>
       </div>
     );
   }
@@ -45,6 +49,7 @@ namespace Scale {
     radius: number;
     solar: number;
     tail: number;
+    flipView: () => void;
     setRelativity: (e: any) => void;
     setDistanceScale: (e: any) => void;
     setRadiusScale: (e: any) => void;

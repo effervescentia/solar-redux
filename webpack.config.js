@@ -27,6 +27,9 @@ module.exports = {
         attrs: ['link:href']
       }
     }, {
+      test: /\.(jpg|png|svg)$/,
+      loader: 'file-loader'
+    }, {
       test: /\.css$/,
       include: /styles/,
       loader: ExtractTextPlugin.extract({

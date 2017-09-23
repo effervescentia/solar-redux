@@ -1,12 +1,12 @@
 import { h, Component } from 'preact';
 import { connect } from 'preact-redux';
 import { bindActions } from './utils';
-import Timer from './timer';
 // tslint:disable-next-line max-line-length
 import { State } from '../store';
+import * as selectors from '../store/selectors';
 import Actions, { startTime, stopTime } from '../store/actions';
 
-export const selector = ({ tick: time }: State) => ({ time });
+export const selector = (state: State) => ({ date: selectors.date(state) });
 export const actions = { startTime, stopTime };
 
 @connect(selector, bindActions(actions))
@@ -16,7 +16,7 @@ class TimeControls extends Component<any, any> {
       <div id="time-controls">
         <button onClick={props.startTime}>Start Time</button>
         <button onClick={props.stopTime}>Stop Time</button>
-        <Timer time={props.time} />
+        <h1>{props.date}</h1>
       </div>
     );
   }
@@ -24,7 +24,7 @@ class TimeControls extends Component<any, any> {
 
 namespace TimeControls {
   export interface Props {
-    time: number;
+    date: string;
     startTime: () => void;
     stopTime: () => void;
   }

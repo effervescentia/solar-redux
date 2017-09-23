@@ -8,6 +8,8 @@ export interface State {
   running: boolean;
   tick: number;
   startTime: number;
+  sideView: boolean;
+  target: string;
   scale: State.Scale;
   planets: State.Planets;
 }

@@ -1,5 +1,5 @@
 import { State } from '.';
-import { isRunning, hasPlanet, isPlanetMoving } from './selectors';
+import { isRunning, hasPlanet, isPlanetMoving, targetPlanet } from './selectors';
 
 export interface Validator<P = any> {
   func: Validator.Func<P>;
@@ -38,3 +38,7 @@ export const planetIsMoving = Validator.createValidator<string>(
 export const planetIsStopped = Validator.createValidator<string>(
   (name, state) => !isPlanetMoving(state, name),
   'planet is already moving');
+
+export const notFollowingPlanet = Validator.createValidator<string>(
+  (name, state) => name !== targetPlanet(state),
+  'planet is already the target');

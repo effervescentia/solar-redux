@@ -19,8 +19,8 @@ declare module 'solaris-model' {
   namespace SolarisModel {
     export interface Body {
       radius: number;
-      position: [number, number];
-      getOrbitPath(): [number, number][];
+      position: [number, number, number];
+      getOrbitPath(): [number, number, number][];
     }
   }
 

@@ -7,9 +7,11 @@
     "start": "webpack-dev-server --watch --open"
   },
   "devDependencies": {
+    "@types/webpack-env": "^1.13.1",
     "awesome-typescript-loader": "^3.2.3",
     "css-loader": "^0.28.7",
     "extract-text-webpack-plugin": "^3.0.0",
+    "file-loader": "^0.11.2",
     "html-loader": "^0.5.1",
     "html-webpack-plugin": "^2.30.1",
     "style-loader": "^0.18.2",
@@ -21,6 +23,7 @@
   },
   "dependencies": {
     "@types/dateformat": "^1.0.1",
+    "@types/node": "^8.0.30",
     "@types/redux-actions": "^2.2.1",
     "dateformat": "^3.0.2",
     "konva": "^1.6.8",

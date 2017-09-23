@@ -4,10 +4,11 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "lib": ["ES2015", "DOM", "ES2016.Array.Include"],
+    "types": ["node", "webpack-env"],
     "jsx": "react",
     "jsxFactory": "h",
     "declaration": false,
-    "strict": true,
+    "strict": false,
     "experimentalDecorators": true
   },
   "exclude": ["node_modules", "dist"],

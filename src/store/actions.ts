@@ -17,6 +17,9 @@ namespace Actions {
   export const TICK = 'TICK';
   export type Tick = Action<typeof TICK, number>;
 
+  export const FLIP_VIEW = 'FLIP_VIEW';
+  export type FlipView = Action<typeof FLIP_VIEW>;
+
   export const ADD_PLANET = 'ADD_PLANET';
   export type AddPlanet = Action<typeof ADD_PLANET, string>;
   export const REMOVE_PLANET = 'REMOVE_PLANET';
@@ -27,6 +30,8 @@ namespace Actions {
   export type StartPlanet = Action<typeof START_PLANET, string>;
   export const REVERSE_PLANET = 'REVERSE_PLANET';
   export type ReversePlanet = Action<typeof REVERSE_PLANET, string>;
+  export const FOLLOW_PLANET = 'FOLLOW_PLANET';
+  export type FollowPlanet = Action<typeof FOLLOW_PLANET, string>;
 
   export const SET_RELATIVITY = 'SET_RELATIVITY';
   export type SetRelativity = Action<typeof SET_RELATIVITY, number>;
@@ -65,9 +70,14 @@ export const stopPlanet = Actions.createAction(Actions.STOP_PLANET, <any>null, {
 export const startPlanet = Actions.createAction(Actions.START_PLANET, <any>null, {
   payload: validators.planetIsStopped,
 });
+export const followPlanet = Actions.createAction(Actions.FOLLOW_PLANET, <any>null, {
+  payload: validators.notFollowingPlanet,
+});
 export const reversePlanet = Actions.createAction(Actions.REVERSE_PLANET);
 
 export const tick = Actions.createAction(Actions.TICK, (inc: number = 1) => inc);
+
+export const flipView = Actions.createAction(Actions.FLIP_VIEW);
 
 export const setRelativity = Actions.createAction(Actions.SET_RELATIVITY);
 export const setDistanceScale = Actions.createAction(Actions.SET_DISTANCE_SCALE);

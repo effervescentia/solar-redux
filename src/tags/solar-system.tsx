@@ -8,6 +8,7 @@ import Scale from './scale';
 import TimeControls from './time-controls';
 import PlanetControls from './planet-controls';
 import { State } from '../store';
+import * as selectors from '../store/selectors';
 import Sun from '../bodies/sun';
 import Planet from '../bodies/planet';
 import { PLANETS } from '../store/reducers/planets';
@@ -17,21 +18,23 @@ const PLANET_COLORS: { [key: string]: string } = {
   mercury: '#7a1414',
   venus: '#b4b04a',
   earth: '#61d6eb',
-  mars: 'red',
+  mars: '#e62a2a',
   jupiter: '#4435f0',
   saturn: '#95a448',
   neptune: '#2d6690',
   uranus: '#1d7982',
+  pluto: '#c76c6c',
 };
 
-export const selector = ({ startTime, tick, planets: { names: planets }, scale: { distance, radius, solar, tail } }: State) =>
+export const selector = (state: State) =>
   ({
-    planets,
-    tailLength: tail,
-    date: dateFormat(new Date(startTime + tick * DAY_IN_MILLIS), 'yyyy-mm-dd'),
-    distanceScale: distance * PLANET_SCALE,
-    radiusScale: radius * RADIUS_SCALE,
-    solarScale: solar * SOLAR_SCALE,
+    planets: state.planets.names,
+    isSideView: state.sideView,
+    tailLength: state.scale.tail,
+    date: selectors.date(state),
+    distanceScale: state.scale.distance * PLANET_SCALE,
+    radiusScale: state.scale.radius * RADIUS_SCALE,
+    solarScale: state.scale.solar * SOLAR_SCALE,
   });
 
 @connect(selector)
