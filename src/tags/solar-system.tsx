@@ -9,8 +9,8 @@ import { startTime, stopTime } from '../store/actions';
 import Timer from './timer';
 import Scale from './scale';
 import { bindActions } from './utils';
-import Sun from '../planets/sun';
-import Planet from '../planets/planet';
+import Sun from '../bodies/sun';
+import Planet from '../bodies/planet';
 import { PLANETS } from '../store/reducers/planets';
 import { DAY_IN_MILLIS, SCALE, SOLAR_SCALE, PLANET_SCALE, RADIUS_SCALE } from '../variables';
 import PlanetControls from './planet-controls';
@@ -69,7 +69,7 @@ class SolarSystem extends Component<any, any> {
       height: window.innerHeight,
     });
     const [x, y] = [this.stage.getWidth() / 2, this.stage.getHeight() / 2];
-    this.sun = new Sun(x, y, this.model.bodies.sun.radius / this.props.solarScale);
+    this.sun = new Sun(this);
     this.planets = this.props.planets
       .map((name: string) => new Planet(this, name, PLANET_COLORS[name]));
 
@@ -86,7 +86,7 @@ class SolarSystem extends Component<any, any> {
     const dateString = dateFormat(date, 'yyyy-mm-dd');
     this.model.setTime(dateString);
     this.layer.clear();
-    this.sun.radius(this.model.bodies.sun.radius / this.props.solarScale);
+    this.sun.updateRadius();
     this.layer.draw();
     this.planets.forEach(planet => planet.updatePosition());
   }

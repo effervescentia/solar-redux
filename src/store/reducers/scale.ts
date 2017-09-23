@@ -1,7 +1,7 @@
 import Actions from '../actions';
 import { State } from '..';
 
-export const DEFAULTS = { relativity: 7, distance: 100, radius: 25, solar: 25 };
+export const DEFAULTS = { relativity: 50, distance: 250, radius: 25, solar: 25 };
 
 export type Action = Actions.SetRelativity
   | Actions.SetDistanceScale
