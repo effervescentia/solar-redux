@@ -30,33 +30,38 @@ namespace Actions {
 
   export const SET_RELATIVITY = 'SET_RELATIVITY';
   export type SetRelativity = Action<typeof SET_RELATIVITY, number>;
+  export const SET_DISTANCE_SCALE = 'SET_PLANET_SCALE';
+  export type SetDistanceScale = Action<typeof SET_DISTANCE_SCALE, number>;
 
   // tslint:disable-next-line max-line-length
   export const createAction = (type: string, payloadCreator: (...args: any[]) => any = <any>null, validator: any = {}) =>
-    createFSA(type, payloadCreator, () => ({ validator }))
+    createFSA(type, payloadCreator, () => ({ validator }));
 }
 
 export default Actions;
 
 export const startTime = Actions.createAction(Actions.START_TIME, <any>null, {
-  payload: validators.timeIsStopped
+  payload: validators.timeIsStopped,
 });
 export const stopTime = Actions.createAction(Actions.STOP_TIME, <any>null, {
-  payload: validators.timeHasStarted
+  payload: validators.timeHasStarted,
 });
+
 export const addPlanet = Actions.createAction(Actions.ADD_PLANET, <any>null, {
-  payload: validators.planetNonexistent
+  payload: validators.planetNonexistent,
 });
 export const removePlanet = Actions.createAction(Actions.REMOVE_PLANET, <any>null, {
-  payload: validators.planetExists
+  payload: validators.planetExists,
 });
 export const stopPlanet = Actions.createAction(Actions.STOP_PLANET, <any>null, {
-  payload: validators.planetIsMoving
+  payload: validators.planetIsMoving,
 });
 export const startPlanet = Actions.createAction(Actions.START_PLANET, <any>null, {
-  payload: validators.planetIsStopped
+  payload: validators.planetIsStopped,
 });
 export const reversePlanet = Actions.createAction(Actions.REVERSE_PLANET);
+
 export const tick = Actions.createAction(Actions.TICK, (inc: number = 1) => inc);
-// tslint:disable-next-line max-line-length
-export const setRelativity = Actions.createAction(Actions.SET_RELATIVITY, (relativity: number) => relativity);
+
+export const setRelativity = Actions.createAction(Actions.SET_RELATIVITY);
+export const setDistanceScale = Actions.createAction(Actions.SET_DISTANCE_SCALE);

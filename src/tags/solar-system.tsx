@@ -26,12 +26,9 @@ const PLANET_COLORS: { [key: string]: string } = {
   uranus: '#1d7982',
 };
 
-export const selector = ({ tick: time, planets: { names: planets }, relativity }: State) =>
-  ({ time, planets, relativity });
-export const actions = {
-  startTime,
-  stopTime
-};
+export const selector = ({ tick: time, planets: { names: planets }, relativity, distanceScale }: State) =>
+  ({ time, planets, relativity, distanceScale: distanceScale * PLANET_SCALE });
+export const actions = { startTime, stopTime };
 
 @connect(selector, bindActions(actions))
 class SolarSystem extends Component<any, any> {
@@ -89,6 +86,7 @@ class SolarSystem extends Component<any, any> {
 namespace SolarSystem {
   export interface Props {
     time: number;
+    distanceScale: number;
     planets: string[];
     startTime: () => void;
     stopTime: () => void;

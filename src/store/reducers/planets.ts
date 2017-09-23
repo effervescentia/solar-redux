@@ -20,25 +20,28 @@ export const PLANETS = [
 // tslint:disable-next-line max-line-length
 export default (state: State.Planets = { stopped: [], reversed: [], names: PLANETS }, action: Action) => {
   switch (action.type) {
-    case Actions.ADD_PLANET: return { ...state, names: [...state.names, action.payload] };
+    case Actions.ADD_PLANET: return {
+      ...state,
+      names: [...state.names, action.payload],
+    };
     case Actions.REMOVE_PLANET: return {
       ...state,
-      names: state.names.filter(planet => planet !== action.payload)
+      names: state.names.filter(planet => planet !== action.payload),
     };
     case Actions.STOP_PLANET: return {
       ...state,
-      stopped: [...state.stopped, action.payload]
+      stopped: [...state.stopped, action.payload],
     };
     case Actions.START_PLANET: return {
       ...state,
-      stopped: state.stopped.filter(planet => planet !== action.payload)
+      stopped: state.stopped.filter(planet => planet !== action.payload),
     };
     case Actions.REVERSE_PLANET: return {
       ...state,
       reversed: state.reversed.includes(action.payload)
-        ? state.reversed.filter(name => name !== action.payload) 
-        : [...state.reversed]
-    }
+        ? state.reversed.filter(name => name !== action.payload)
+        : [...state.reversed],
+    };
     default: return state;
   }
 };

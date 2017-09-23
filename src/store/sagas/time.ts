@@ -7,7 +7,7 @@ function* startTime() {
   yield delay(1000);
   while (yield select(isRunning)) {
     yield put(tick());
-    yield delay(10);
+    yield delay(100);
   }
 }
 

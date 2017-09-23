@@ -8,6 +8,7 @@ export interface State {
   running: boolean;
   tick: number;
   relativity: number;
+  distanceScale: number;
   planets: State.Planets;
 }
 
