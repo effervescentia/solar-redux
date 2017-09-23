@@ -24,10 +24,11 @@ const PLANET_COLORS: { [key: string]: string } = {
   uranus: '#1d7982',
 };
 
-export const selector = ({ startTime, tick, planets: { names: planets }, scale: { relativity, distance, radius, solar } }: State) =>
+export const selector = ({ startTime, tick, planets: { names: planets }, scale: { distance, radius, solar, tail } }: State) =>
   ({
     planets,
-    date: dateFormat(new Date(startTime + tick * DAY_IN_MILLIS * relativity), 'yyyy-mm-dd'),
+    tailLength: tail,
+    date: dateFormat(new Date(startTime + tick * DAY_IN_MILLIS), 'yyyy-mm-dd'),
     distanceScale: distance * PLANET_SCALE,
     radiusScale: radius * RADIUS_SCALE,
     solarScale: solar * SOLAR_SCALE,
@@ -75,6 +76,7 @@ class SolarSystem extends Component<any, any> {
 namespace SolarSystem {
   export interface Props {
     date: string;
+    tailLength: number;
     distanceScale: number;
     radiusScale: number;
     solarScale: number;

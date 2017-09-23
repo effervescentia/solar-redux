@@ -11,7 +11,7 @@ class Sun extends Layer {
     this.orb = new Circle({
       radius: system.model.bodies.sun.radius / system.props.solarScale,
       x: system.stage.getWidth() / 2,
-      y: system.stage.getHeight() / 2, fill: 'yellow'
+      y: system.stage.getHeight() / 2, fill: 'yellow',
     });
     this.add(this.orb);
     this.system.stage.add(this);

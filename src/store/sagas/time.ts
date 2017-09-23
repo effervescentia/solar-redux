@@ -1,13 +1,13 @@
 import { delay } from 'redux-saga';
 import { select, put, takeEvery } from 'redux-saga/effects';
 import Actions, { tick } from '../actions';
-import { isRunning } from '../selectors';
+import { isRunning, relativity } from '../selectors';
 
 function* startTime() {
   yield delay(1000);
   while (yield select(isRunning)) {
-    yield put(tick());
-    yield delay(100);
+    yield put(tick(yield select(relativity)));
+    yield delay(10);
   }
 }
 

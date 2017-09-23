@@ -7,6 +7,7 @@ export type Action = Actions.AddPlanet |
   Actions.StartPlanet |
   Actions.ReversePlanet;
 export const PLANETS = [
+  'pluto',
   'uranus',
   'neptune',
   'saturn',
@@ -16,9 +17,12 @@ export const PLANETS = [
   'mars',
   'mercury',
 ];
+export const DEFAULTS = {
+
+};
 
 // tslint:disable-next-line max-line-length
-export default (state: State.Planets = { stopped: [], reversed: [], names: PLANETS }, action: Action) => {
+export default (state: State.Planets = { stopped: [], reversed: [], names: PLANETS }, action: Action): State.Planets => {
   switch (action.type) {
     case Actions.ADD_PLANET: return {
       ...state,
