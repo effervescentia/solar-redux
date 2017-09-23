@@ -10,4 +10,5 @@ export default combineReducers({
   tick,
   planets,
   scale,
+  startTime: (state = new Date().getTime()) => state,
 });

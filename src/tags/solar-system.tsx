@@ -24,9 +24,10 @@ const PLANET_COLORS: { [key: string]: string } = {
   uranus: '#1d7982',
 };
 
-export const selector = ({ tick: time, planets: { names: planets }, scale: { relativity, distance, radius, solar } }: State) =>
+export const selector = ({ startTime, tick, planets: { names: planets }, scale: { relativity, distance, radius, solar } }: State) =>
   ({
-    time, planets, relativity,
+    planets,
+    date: dateFormat(new Date(startTime + tick * DAY_IN_MILLIS * relativity), 'yyyy-mm-dd'),
     distanceScale: distance * PLANET_SCALE,
     radiusScale: radius * RADIUS_SCALE,
     solarScale: solar * SOLAR_SCALE,
@@ -37,7 +38,6 @@ class SolarSystem extends Component<any, any> {
 
   sun: Sun;
   planets: { [key: string]: Planet };
-  startTime: number = new Date().getTime();
   model: SolarisModel = new SolarisModel();
   stage: Stage;
 
@@ -65,11 +65,8 @@ class SolarSystem extends Component<any, any> {
       .reduce((planets: { [key: string]: Planet }, name: string) => Object.assign(planets, { [name]: new Planet(this, name, PLANET_COLORS[name]) }), {});
   }
 
-  componentWillReceiveProps(props: any) {
-    const newTime = this.startTime + props.time * DAY_IN_MILLIS * this.props.relativity;
-    const date = new Date(newTime);
-    const dateString = dateFormat(date, 'yyyy-mm-dd');
-    this.model.setTime(dateString);
+  componentWillReceiveProps(props: SolarSystem.Props) {
+    this.model.setTime(props.date);
     this.sun.updateRadius();
     Object.keys(this.planets).forEach(key => this.planets[key].updatePosition());
   }
@@ -77,8 +74,7 @@ class SolarSystem extends Component<any, any> {
 
 namespace SolarSystem {
   export interface Props {
-    time: number;
-    relativity: number;
+    date: string;
     distanceScale: number;
     radiusScale: number;
     solarScale: number;
