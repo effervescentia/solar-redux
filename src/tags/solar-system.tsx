@@ -14,27 +14,17 @@ import Planet from '../bodies/planet';
 import { PLANETS } from '../store/reducers/planets';
 import { DAY_IN_MILLIS, SOLAR_SCALE, PLANET_SCALE, RADIUS_SCALE } from '../variables';
 
-const PLANET_COLORS: { [key: string]: string } = {
-  mercury: '#7a1414',
-  venus: '#b4b04a',
-  earth: '#61d6eb',
-  mars: '#e62a2a',
-  jupiter: '#4435f0',
-  saturn: '#95a448',
-  neptune: '#2d6690',
-  uranus: '#1d7982',
-  pluto: '#c76c6c',
-};
-
 export const selector = (state: State) =>
   ({
-    planets: state.planets.names,
+    planets: state.planets.allIds,
     isSideView: state.sideView,
     tailLength: state.scale.tail,
-    date: selectors.date(state),
+    date: selectors.coreDate(state),
+    dates: selectors.planetDates(state),
     distanceScale: state.scale.distance * PLANET_SCALE,
     radiusScale: state.scale.radius * RADIUS_SCALE,
     solarScale: state.scale.solar * SOLAR_SCALE,
+    reversed: state.planets.allIds.reduce((reversed, id) => Object.assign(reversed, { [id]: state.planets.byId[id].reverse }), {}),
   });
 
 @connect(selector)
@@ -42,7 +32,7 @@ class SolarSystem extends Component<any, any> {
 
   sun: Sun;
   planets: { [key: string]: Planet };
-  model: SolarisModel = new SolarisModel();
+  model: SolarisModel;
   stage: Stage;
 
   render(props: SolarSystem.Props) {
@@ -50,15 +40,14 @@ class SolarSystem extends Component<any, any> {
       <section id="galaxy">
         <div id="solar-system"></div>
         <Scale />
-        <div id="planet-controls">
-          {PLANETS.map(name => <PlanetControls name={name} />)}
-        </div>
+        <PlanetControls />
         <TimeControls />
       </section>
     );
   }
 
   componentDidMount() {
+    this.model = new SolarisModel();
     this.stage = new Stage({
       container: 'solar-system',
       width: window.innerWidth,
@@ -66,19 +55,27 @@ class SolarSystem extends Component<any, any> {
     });
     this.sun = new Sun(this);
     this.planets = this.props.planets
-      .reduce((planets: { [key: string]: Planet }, name: string) => Object.assign(planets, { [name]: new Planet(this, name, PLANET_COLORS[name]) }), {});
+      .reduce((planets: { [key: string]: Planet }, name: string) => Object.assign(planets, { [name]: new Planet(this, name) }), {});
   }
 
   componentWillReceiveProps(props: SolarSystem.Props) {
     this.model.setTime(props.date);
     this.sun.updateRadius();
-    Object.keys(this.planets).forEach(key => this.planets[key].updatePosition());
+
+    if (this.props.planets.length < Object.keys(this.planets).length) {
+      Object.keys(this.planets)
+        .filter(key => !this.props.planets.includes(key))
+        .forEach(key => this.planets[key].hide());
+    }
+    this.props.planets.forEach(key => this.planets[key].updatePosition());
   }
 }
 
 namespace SolarSystem {
   export interface Props {
     date: string;
+    dates: { [planet: string]: string };
+    reversed: { [planet: string]: boolean };
     tailLength: number;
     distanceScale: number;
     radiusScale: number;

@@ -6,7 +6,7 @@ import { State } from '../store';
 import * as selectors from '../store/selectors';
 import Actions, { startTime, stopTime } from '../store/actions';
 
-export const selector = (state: State) => ({ date: selectors.date(state) });
+export const selector = (state: State) => ({ date: selectors.coreDate(state) });
 export const actions = { startTime, stopTime };
 
 @connect(selector, bindActions(actions))

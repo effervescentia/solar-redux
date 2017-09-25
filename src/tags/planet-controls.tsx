@@ -1,10 +1,12 @@
 import { h, Component } from 'preact';
 import { connect } from 'preact-redux';
 import { bindActions } from './utils';
+import { State } from '../store';
 // tslint:disable-next-line max-line-length
 import Actions, { addPlanet, removePlanet, startPlanet, stopPlanet, reversePlanet, followPlanet } from '../store/actions';
 
-const actions = {
+export const selector = ({ planets: { allIds: planets } }: State) => ({ planets });
+export const actions = {
   addPlanet,
   removePlanet,
   startPlanet,
@@ -13,18 +15,23 @@ const actions = {
   followPlanet,
 };
 
-@connect(undefined, bindActions(actions))
-class PlanetControls extends Component<{ name: string }, any> {
+@connect(selector, bindActions(actions))
+class PlanetControls extends Component<any, any> {
+
+  selector: HTMLSelectElement;
+
   render(props: PlanetControls.Props) {
     return (
-      <div>
-        <h4>{props.name}</h4>
-        <button onClick={() => props.addPlanet(props.name)}>Add</button>
-        <button onClick={() => props.removePlanet(props.name)}>Remove</button>
-        <button onClick={() => props.startPlanet(props.name)}>Start</button>
-        <button onClick={() => props.stopPlanet(props.name)}>Stop</button>
-        <button onClick={() => props.reversePlanet(props.name)}>Reverse</button>
-        <button onClick={() => props.followPlanet(props.name)}>Follow</button>
+      <div id="planet-controls">
+        <select ref={selector => this.selector = selector as any}>
+          {props.planets.map(planet => <option value={planet}>{planet}</option>)}
+        </select>
+        <button onClick={() => props.addPlanet(this.selector.value)}>Add</button>
+        <button onClick={() => props.removePlanet(this.selector.value)}>Remove</button>
+        <button onClick={() => props.startPlanet(this.selector.value)}>Start</button>
+        <button onClick={() => props.stopPlanet(this.selector.value)}>Stop</button>
+        <button onClick={() => props.reversePlanet(this.selector.value)}>Reverse</button>
+        <button onClick={() => props.followPlanet(this.selector.value)}>Follow</button>
       </div>
     );
   }
@@ -32,7 +39,7 @@ class PlanetControls extends Component<{ name: string }, any> {
 
 namespace PlanetControls {
   export interface Props {
-    name: string;
+    planets: string[];
     addPlanet: (name: string) => void;
     removePlanet: (name: string) => void;
     startPlanet: (name: string) => void;

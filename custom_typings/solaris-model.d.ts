@@ -20,6 +20,8 @@ declare module 'solaris-model' {
     export interface Body {
       radius: number;
       position: [number, number, number];
+      setTime(date: Date): void;
+      getPositionAtTime(date: string): [number, number, number];
       getOrbitPath(): [number, number, number][];
     }
   }

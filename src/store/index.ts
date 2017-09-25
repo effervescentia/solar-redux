@@ -16,9 +16,14 @@ export interface State {
 
 export namespace State {
   export interface Planets {
-    reversed: string[];
-    stopped: string[];
-    names: string[];
+    allIds: string[];
+    byId: { [id: string]: Planet };
+  }
+  export interface Planet {
+    tick: number;
+    reverse?: boolean;
+    stop?: boolean;
+    visible?: boolean;
   }
   export interface Scale {
     relativity: number;

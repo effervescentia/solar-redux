@@ -1,4 +1,5 @@
 import { Layer, Circle, Text, Image as KonvaImage } from 'konva';
+import SolarisModel from 'solaris-model';
 import Sun from './sun';
 import SolarSystem from '../tags/solar-system';
 
@@ -7,21 +8,21 @@ const pathToImages = require.context('../../img', true);
 class Planet extends Layer {
 
   image: KonvaImage;
-  orb: Circle;
   title: Text;
-  radius: number;
   paths: Circle[] = [];
 
   get body() {
     return this.system.model.bodies[this.planetName];
   }
 
-  constructor(public system: SolarSystem, public planetName: string, public color: string) {
+  constructor(public system: SolarSystem, public planetName: string) {
     super();
     const { distanceScale, radiusScale, tailLength } = this.system.props;
     const { radius: rawRadius } = this.body;
-    const radius = this.radius = rawRadius / radiusScale;
+    const radius = rawRadius / radiusScale;
     const { x, y, sunX, sunY } = this.getPositions();
+
+    // label
     this.add(this.title = new Text({
       x: x - 50,
       y: y + radius + 5,
@@ -31,6 +32,8 @@ class Planet extends Layer {
       fill: 'white',
       shadowColor: 'black',
     }));
+
+    // tail
     this.body.getOrbitPath()
       .reverse()
       .filter((_: [number, number], index: number) => index < tailLength)
@@ -42,10 +45,8 @@ class Planet extends Layer {
         this.paths.push(path);
         this.add(path);
       });
-    // this.add(this.orb = new Circle({
-    //   x, y, radius,
-    //   fill: this.color,
-    // }));
+
+    // body
     const image = new Image();
     image.onload = () => {
       this.image = new KonvaImage({
@@ -64,25 +65,36 @@ class Planet extends Layer {
   }
 
   updatePosition() {
-    const { radiusScale } = this.system.props;
+    const { radiusScale, dates: { [this.planetName]: date } } = this.system.props;
+    this.body.setTime(new Date(date));
+
     const { x, y, sunX, sunY } = this.getPositions();
+    const radius = this.body.radius / radiusScale;
+
+    if (!this.isVisible()) {
+      this.show();
+    }
+
     this.clear();
-    this.radius = this.body.radius / radiusScale;
-    this.image.x(x - this.radius);
-    this.image.y(y - this.radius);
-    this.image.height(this.radius * 2);
-    this.image.width(this.radius * 2);
-    // this.orb.x(x);
-    // this.orb.y(y);
-    // this.orb.radius(this.radius = this.body.radius / radiusScale);
+
+    this.image.x(x - radius);
+    this.image.y(y - radius);
+    this.image.height(radius * 2);
+    this.image.width(radius * 2);
+
     this.title.x(x - 50);
-    this.title.y(y + this.radius + 5);
+    this.title.y(y + radius + 5);
+
     this.redrawTail(sunX, sunY, this.body.getOrbitPath());
+
     this.draw();
   }
 
   redrawTail(sunX: number, sunY: number, path: [number, number, number][]) {
-    const { distanceScale, radiusScale, tailLength, isSideView } = this.system.props;
+    const {
+      distanceScale, radiusScale, tailLength, isSideView,
+      reversed: { [this.planetName]: reversed },
+    } = this.system.props;
     const { radius: rawRadius } = this.body;
 
     if (tailLength > this.paths.length) {
@@ -96,7 +108,7 @@ class Planet extends Layer {
         .forEach(path => path.hide());
     }
 
-    path.reverse()
+    (reversed ? path : path.reverse())
       .slice(0, tailLength)
       .forEach(([pathX, pathY, pathZ], index) => {
         const path = this.paths[index];
@@ -110,12 +122,12 @@ class Planet extends Layer {
   }
 
   getPositions() {
-    const { distanceScale, isSideView } = this.system.props;
-    const { position: [offsetX, offsetY, offsetZ] } = this.body;
+    const { distanceScale, isSideView, dates: { [this.planetName]: date } } = this.system.props;
+    const [offsetX, offsetY, offsetZ] = this.body.getPositionAtTime(date);
     const [sunX, sunY] = this.system.sun.getCenter();
     const [x, y] = [
       sunX + offsetX / distanceScale,
-      sunY + (isSideView ? offsetZ : offsetY) / distanceScale
+      sunY + (isSideView ? offsetZ : offsetY) / distanceScale,
     ];
 
     return { x, y, sunX, sunY };
@@ -123,8 +135,7 @@ class Planet extends Layer {
 
   static createPath(x: number, y: number, opacity: number) {
     return new Circle({
-      x,
-      y,
+      x, y,
       radius: .5,
       fill: 'white',
       opacity: opacity / 50,
