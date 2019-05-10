@@ -1,3 +1,4 @@
 {
+  "alias": ["solar.benteichman.ca"],
   "builds": [{ "src": "package.json", "use": "@now/static-build" }]
 }
