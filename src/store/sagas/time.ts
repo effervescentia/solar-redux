@@ -1,5 +1,4 @@
-import { delay } from 'redux-saga';
-import { select, put, takeEvery } from 'redux-saga/effects';
+import { delay, select, put, takeEvery } from 'redux-saga/effects';
 import Actions, { tick } from '../actions';
 import { isRunning, relativity } from '../selectors';
 

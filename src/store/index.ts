@@ -1,6 +1,6 @@
-import { applyMiddleware, createStore, Store } from 'redux';
+import { applyMiddleware, createStore } from 'redux';
 import createSagaMiddleware from 'redux-saga';
-import * as createValidatorMiddleware from 'redux-validator';
+import createValidatorMiddleware from 'redux-validator';
 import reducers from './reducers';
 import sagas from './sagas';
 
@@ -38,7 +38,11 @@ export default () => {
   const validatorMiddleware = createValidatorMiddleware();
   const sagaMiddleware = createSagaMiddleware();
 
-  const store = createStore(reducers, {}, applyMiddleware(validatorMiddleware, sagaMiddleware));
+  const store = createStore(
+    reducers,
+    {},
+    applyMiddleware(validatorMiddleware, sagaMiddleware)
+  );
 
   // store.subscribe(() => console.log(store.getState()));
 

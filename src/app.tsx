@@ -1,8 +1,6 @@
-import { h, Component } from 'preact';
-import { Stage, Layer, Circle } from 'konva';
-import { connect, Provider } from 'preact-redux';
-import createStore, { State } from './store';
-import { startTime, stopTime } from './store/actions';
+import { h } from 'preact';
+import { Provider } from 'preact-redux';
+import createStore from './store';
 import SolarSystem from './tags/solar-system';
 
 const store = createStore();

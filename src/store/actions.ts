@@ -1,7 +1,6 @@
 import { Action as ReduxAction } from 'redux';
 import { createAction as createFSA } from 'redux-actions';
 import * as validators from './validators';
-import { State } from '.';
 
 export interface Action<T extends string, P = undefined> extends ReduxAction {
   type: T;
@@ -45,42 +44,62 @@ namespace Actions {
   export type SetTailLength = Action<typeof SET_TAIL_LENGTH, number>;
 
   // tslint:disable-next-line max-line-length
-  export const createAction = (type: string, payloadCreator: (...args: any[]) => any = <any>null, validator: any = {}) =>
-    createFSA(type, payloadCreator, () => ({ validator }));
+  export const createAction = (
+    type: string,
+    payloadCreator: (...args: any[]) => any = <any>null,
+    validator: any = {}
+  ) => createFSA(type, payloadCreator, () => ({ validator }));
 }
 
 export default Actions;
 
 export const startTime = Actions.createAction(Actions.START_TIME, <any>null, {
-  payload: validators.timeIsStopped,
+  payload: validators.timeIsStopped
 });
 export const stopTime = Actions.createAction(Actions.STOP_TIME, <any>null, {
-  payload: validators.timeHasStarted,
+  payload: validators.timeHasStarted
 });
 
 export const addPlanet = Actions.createAction(Actions.ADD_PLANET, <any>null, {
-  payload: validators.planetNonexistent,
+  payload: validators.planetNonexistent
 });
-export const removePlanet = Actions.createAction(Actions.REMOVE_PLANET, <any>null, {
-  payload: validators.planetExists,
-});
+export const removePlanet = Actions.createAction(
+  Actions.REMOVE_PLANET,
+  <any>null,
+  {
+    payload: validators.planetExists
+  }
+);
 export const stopPlanet = Actions.createAction(Actions.STOP_PLANET, <any>null, {
-  payload: validators.planetIsMoving,
+  payload: validators.planetIsMoving
 });
-export const startPlanet = Actions.createAction(Actions.START_PLANET, <any>null, {
-  payload: validators.planetIsStopped,
-});
-export const followPlanet = Actions.createAction(Actions.FOLLOW_PLANET, <any>null, {
-  payload: validators.notFollowingPlanet,
-});
+export const startPlanet = Actions.createAction(
+  Actions.START_PLANET,
+  <any>null,
+  {
+    payload: validators.planetIsStopped
+  }
+);
+export const followPlanet = Actions.createAction(
+  Actions.FOLLOW_PLANET,
+  <any>null,
+  {
+    payload: validators.notFollowingPlanet
+  }
+);
 export const reversePlanet = Actions.createAction(Actions.REVERSE_PLANET);
 
-export const tick = Actions.createAction(Actions.TICK, (inc: number = 1) => inc);
+export const tick = Actions.createAction(
+  Actions.TICK,
+  (inc: number = 1) => inc
+);
 
 export const flipView = Actions.createAction(Actions.FLIP_VIEW);
 
 export const setRelativity = Actions.createAction(Actions.SET_RELATIVITY);
-export const setDistanceScale = Actions.createAction(Actions.SET_DISTANCE_SCALE);
+export const setDistanceScale = Actions.createAction(
+  Actions.SET_DISTANCE_SCALE
+);
 export const setRadiusScale = Actions.createAction(Actions.SET_RADIUS_SCALE);
 export const setSolarScale = Actions.createAction(Actions.SET_SOLAR_SCALE);
 export const setTailLength = Actions.createAction(Actions.SET_TAIL_LENGTH);
